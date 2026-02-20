@@ -132,51 +132,10 @@ body {
         font-size: 1.2rem;
     }
     .navbar {
-        gap: 0.5rem;
-        flex-wrap: wrap;
-        padding: 0.5rem 0;
+        gap: 1rem;
     }
     .navbar a {
-        padding: 0.4rem 0.8rem;
-        font-size: 0.9rem;
-    }
-    .hero {
-        padding: 0 1rem;
-    }
-    .page-title {
-        font-size: 2rem;
-        margin-top: 80px;
-    }
-    .blog-list {
-        margin-top: 20px;
-        gap: 15px;
-    }
-    .blog-card {
-        width: 90%;
-        padding: 20px;
-    }
-    .blog-card h3 {
-        font-size: 1.4rem;
-    }
-    .blog-card p {
-        font-size: 0.9rem;
-    }
-    .blog-container {
-        margin-top: 80px;
-        width: 90%;
-        padding: 20px;
-    }
-    .blog-container h1 {
-        font-size: 1.8rem;
-    }
-    .blog-container h2 {
-        font-size: 1.3rem;
-    }
-    .blog-container h3 {
-        font-size: 1.1rem;
-    }
-    .blog-container p {
-        font-size: 0.95rem;
+        padding: 0.5rem;
     }
 }
 
