@@ -125,201 +125,144 @@ body {
     }
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-    .name {
-        font-size: 2rem;
-    }
-    
-    .subtitle {
-        font-size: 1rem;
-    }
-    
-    .navbar {
-        gap: 0.5rem;
-        padding: 0.5rem 0;
-        flex-wrap: wrap;
-    }
-    
-    .navbar a {
-        padding: 0.3rem 0.7rem;
-        font-size: 0.9rem;
-    }
-    
-    .hero {
-        padding: 0 1rem;
-    }
+/* Responsive - Mobile First
+   Clean, commented responsive rules. Edit values below to tweak behavior.
+
+   Approach:
+   - Base styles are mobile-friendly by default.
+   - Use `min-width` breakpoints to scale up for tablets/desktops.
+   - Comments explain what to change for each section.
+*/
+
+/* ---------- Base (mobile) adjustments ---------- */
+/* Make hero compact on small screens and allow the name to wrap */
+.hero {
+    padding: 1rem;
+    min-height: 80vh;
 }
 
-@media (max-width: 600px) {
-    .name {
-        font-size: 1.2rem;
-    }
-    
-    @keyframes typewriter {
-        from { width: 0; }
-        to { width: 16ch; }
-    }
-    
-    .subtitle {
-        font-size: 0.9rem;
-    }
-    
-    .navbar {
-        gap: 0.3rem;
-        padding: 0.3rem 0;
-    }
-    
-    .navbar a {
-        padding: 0.2rem 0.5rem;
-        font-size: 0.8rem;
-    }
-    
-    .hero {
-        padding: 0 0.5rem;
-        height: auto;
-        min-height: 100vh;
-    }
-}
-
-@media (max-width: 480px) {
-    .name {
-        font-size: 0.9rem;
-    }
-    
-    @keyframes typewriter {
-        from { width: 0; }
-        to { width: 14ch; }
-    }
-    
-    .subtitle {
-        font-size: 0.7rem;
-    }
-    
-    .navbar a {
-        padding: 0.2rem 0.4rem;
-        font-size: 0.7rem;
-    }
-}
-
-@media (max-width: 360px) {
-    .name {
-        font-size: 0.8rem;
-    }
-    
-    @keyframes typewriter {
-        from { width: 0; }
-        to { width: 13ch; }
-    }
-    
-    .subtitle {
-        font-size: 0.65rem;
-    }
-}
-
-.page-title {
-    font-family: "Nothing You Could Do", cursive;
+.name {
+    /* Mobile-first: smaller readable size, wrapping allowed */
+    font-size: 1.6rem;
+    white-space: normal; /* allow wrapping */
+    overflow: visible;
+    animation: none; /* disable typewriter on smallest screens by default */
+    border-right: none;
+    display: block;
+    max-width: 92vw;
+    margin: 0 auto;
     text-align: center;
-    font-size: 3rem;
-    margin-top: 100px;
-    color: black;
-    margin-bottom: 2rem;
 }
 
-@media (max-width: 768px) {
-    .page-title {
-        font-size: 2rem;
-        margin-top: 80px;
-    }
+.subtitle {
+    font-size: 1rem;
+    margin-top: 0.5rem;
 }
 
-@media (max-width: 480px) {
-    .page-title {
-        font-size: 1.5rem;
-        margin-top: 60px;
-    }
+.navbar {
+    gap: 0.5rem;
+    padding: 0.5rem 0;
+    justify-content: center;
+    flex-wrap: wrap;
 }
 
-.blog-list{
-    margin-top: 40px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 25px;
-    padding-bottom: 50px;
+.navbar a {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.95rem;
 }
 
-@media (max-width: 768px) {
-    .blog-list {
-        margin-top: 30px;
-        gap: 15px;
-        padding: 0 1rem;
-    }
+/* Blog & container sizing for mobile */
+.blog-list {
+    /* Centered frosted container for blog listings */
+    padding: 24px;
+    gap: 18px;
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    margin: 40px auto 80px auto;
+    max-width: 1100px;
+    /* Slightly stronger translucent background to replace blur */
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    border: 1px solid rgba(255,255,255,0.14);
+    box-shadow: 0 8px 40px rgba(8,12,16,0.12);
 }
 
-@media (max-width: 480px) {
-    .blog-list {
-        margin-top: 20px;
-        gap: 10px;
-        padding: 0 0.5rem;
-    }
-}
-
-.blog-card{
-    width: 60%;
-    padding: 30px;
+.blog-card {
+    width: 100%;
+    padding: 18px;
+    border-radius: 12px;
+    display: block;
     text-decoration: none;
-    color: black;
-    transition: all 0.4s ease;
-    border-radius: 20px;
-    background: rgba(255, 255, 255, 0);
-    border: 1px solid rgba(255, 255, 255, 0);
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0);
+    color: inherit;
+    background: rgba(255,255,255,0.02); /* let container show through */
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.04);
     font-family: "Playfair Display", serif;
-    animation: frostedFadeIn 1.5s ease-in-out forwards;
-}
-@media (max-width: 768px) {
-    .blog-card {
-        width: 90%;
-        padding: 20px;
-        border-radius: 15px;
-    }
+    border: 1px solid rgba(255,255,255,0.04);
 }
 
-@media (max-width: 480px) {
-    .blog-card {
-        width: 100%;
-        padding: 15px;
-        border-radius: 12px;
-    }
-}
 .blog-card h3 {
-    font-family: "Playfair Display", serif;
-    font-size: 1.8rem;
     margin: 0 0 10px 0;
-    font-weight: 500;
-    color: black;
-}
-
-@media (max-width: 768px) {
-    .blog-card h3 {
-        font-size: 1.4rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .blog-card h3 {
-        font-size: 1.1rem;
-    }
+    font-family: "Nothing You Could Do", cursive;
+    font-size: 1.45rem;
+    color: #0b0b0b;
 }
 
 .blog-card p {
-    font-family: "Playfair Display", serif;
-    font-size: 1.1rem;
-    font-weight: 500;
     margin: 0;
-    color: rgba(0, 0, 0, 0.9);
+    color: #222;
+    font-size: 1.05rem;
 }
+.blog-container { width: 95%; padding: 16px; margin-top: 60px; }
+
+/* Education page adjustments */
+.education-container { width: 95%; padding: 16px; margin-top: 60px; }
+
+/* ---------- Tablet (>= 600px) ---------- */
+@media (min-width: 600px) {
+    .hero { min-height: 90vh; padding: 1.5rem; }
+    .name {
+        font-size: 2.4rem;
+        white-space: nowrap; /* enable typewriter-like single line */
+        overflow: hidden;
+        border-right: 2px solid black;
+        /* Re-enable animation for medium screens */
+        animation: typewriter 3s steps(22, end) forwards, blink-caret 0.75s step-end infinite;
+        max-width: min(70vw, 40ch);
+    }
+    .subtitle { font-size: 1.15rem; }
+
+    .navbar a { font-size: 1rem; padding: 0.4rem 0.8rem; }
+
+    /* Keep listings stacked vertically on all breakpoints */
+    .blog-list { gap: 18px; padding: 0 1rem; grid-template-columns: 1fr; }
+    .blog-card { width: 100%; padding: 20px; }
+    .blog-container { width: 90%; padding: 24px; margin-top: 80px; }
+    .education-container { width: 90%; padding: 24px; }
+}
+
+/* ---------- Desktop (>= 900px) ---------- */
+@media (min-width: 900px) {
+    .hero { min-height: 100vh; }
+    .name { font-size: 3.6rem; max-width: 60ch; }
+    .subtitle { font-size: 1.5rem; }
+
+    .navbar { gap: 2rem; }
+    .navbar a { font-size: 1rem; padding: 0.5rem 1rem; }
+
+    /* Still use a single-column flow so each listing stacks vertically */
+    .blog-list { gap: 25px; grid-template-columns: 1fr; }
+    .blog-card { width: 100%; padding: 28px; box-sizing: border-box; align-self: stretch; }
+    .blog-container { width: 70%; padding: 40px; margin-top: 120px; }
+    .education-container { width: 70%; padding: 40px; }
+}
+
+/* ---------- Notes for maintainers ---------- */
+/* - To change when the typewriter runs, adjust the min-width value above.
+   - For purely mobile-first experience, keep animation disabled on small screens.
+   - Update `max-width` or `steps()` in the `typewriter` animation if you change the displayed name.
+*/
 
 @media (max-width: 768px) {
     .blog-card p {
@@ -334,9 +277,42 @@ body {
 }
 
 .blog-card:hover{
-    background: rgba(255, 255, 255, 0.25);
-    transform: translateY(-8px);
-    box-shadow: 0 15px 45px 0 rgba(31, 38, 135, 0.5);
+    background: rgba(255,255,255,0.10);
+    transform: translateY(-10px) scale(1.01);
+    box-shadow: 0 20px 50px rgba(8,12,20,0.18);
+    border-color: rgba(255,255,255,0.12);
+}
+
+.blog-card:focus-visible{
+    outline: 3px solid rgba(16,124,186,0.12);
+    outline-offset: 4px;
+}
+
+.blog-card h3 {
+    transition: color 0.18s ease, transform 0.18s ease;
+}
+
+.blog-card:hover h3{
+    color: #071017;
+    transform: translateY(-2px);
+}
+
+/* Title for the listing page */
+.page-title {
+    font-family: "Nothing You Could Do", cursive;
+    text-align: center;
+    font-size: 2.2rem;
+    margin-top: 40px;
+    margin-bottom: 8px;
+    color: #0b0b0b;
+}
+
+@media (min-width: 600px) {
+    .page-title { font-size: 2.8rem; margin-top: 90px; }
+}
+
+@media (min-width: 900px) {
+    .page-title { font-size: 3.2rem; margin-top: 110px; }
 }
 
 .blog-container{
@@ -422,10 +398,10 @@ body.blog-page {
 
 /* Frosted effect for blog pages specifically */
 .blog-page .blog-container {
-    background: rgba(255, 255, 255, 0.15) !important;
-    backdrop-filter: blur(15px) !important;
-    border: 1px solid rgba(255, 255, 255, 0.25) !important;
-    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37) !important;
+    /* Keep frosted look but remove blur for performance/clarity */
+    background: rgba(255, 255, 255, 0.18) !important;
+    border: 1px solid rgba(255, 255, 255, 0.22) !important;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.12) !important;
 }
 
 .blog-date{
@@ -448,14 +424,15 @@ body.blog-page {
 
 /* Small-screen override: disable typewriter and allow wrapping */
 @media (max-width: 600px) {
+    /* Re-enable typewriter on small screens; keep the name single-line during animation */
     .name {
-        white-space: normal !important;
-        overflow: visible !important;
-        animation: none !important;
-        border-right: none !important;
-        display: block;
+        white-space: nowrap !important;
+        overflow: hidden !important;
+        animation: typewriter 3s steps(22, end) forwards, blink-caret 0.75s step-end infinite !important;
+        border-right: 2px solid black !important;
+        display: inline-block !important;
         max-width: 90vw !important;
-        word-break: break-word;
+        box-sizing: border-box;
         text-align: center;
     }
     .hero {
