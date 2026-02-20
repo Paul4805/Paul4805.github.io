@@ -151,12 +151,12 @@ body {
 
 @media (max-width: 600px) {
     .name {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
     }
     
     @keyframes typewriter {
         from { width: 0; }
-        to { width: 18ch; }
+        to { width: 16ch; }
     }
     
     .subtitle {
@@ -182,21 +182,36 @@ body {
 
 @media (max-width: 480px) {
     .name {
-        font-size: 1.2rem;
+        font-size: 0.9rem;
     }
     
     @keyframes typewriter {
         from { width: 0; }
-        to { width: 16ch; }
+        to { width: 14ch; }
     }
     
     .subtitle {
-        font-size: 0.8rem;
+        font-size: 0.7rem;
     }
     
     .navbar a {
         padding: 0.2rem 0.4rem;
         font-size: 0.7rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .name {
+        font-size: 0.8rem;
+    }
+    
+    @keyframes typewriter {
+        from { width: 0; }
+        to { width: 13ch; }
+    }
+    
+    .subtitle {
+        font-size: 0.65rem;
     }
 }
 
