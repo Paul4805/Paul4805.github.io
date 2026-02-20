@@ -78,8 +78,10 @@ body {
     display: inline-block;
     overflow: hidden;
     white-space: nowrap;
+    max-width: min(80vw, 40ch);
+    box-sizing: border-box;
     border-right: 2px solid black;
-    animation: typewriter 3s steps(19, end) forwards, blink-caret 0.75s step-end infinite;
+    animation: typewriter 3s steps(22, end) forwards, blink-caret 0.75s step-end infinite;
 }
 
 @keyframes typewriter {
@@ -441,5 +443,30 @@ body.blog-page {
 @media (max-width: 480px) {
     .blog-date {
         font-size: 11px;
+    }
+}
+
+/* Small-screen override: disable typewriter and allow wrapping */
+@media (max-width: 600px) {
+    .name {
+        white-space: normal !important;
+        overflow: visible !important;
+        animation: none !important;
+        border-right: none !important;
+        display: block;
+        max-width: 90vw !important;
+        word-break: break-word;
+        text-align: center;
+    }
+    .hero {
+        align-items: center;
+        padding-top: 60px;
+        padding-bottom: 40px;
+    }
+}
+
+@media (max-width: 360px) {
+    .name {
+        font-size: 0.8rem !important;
     }
 }
