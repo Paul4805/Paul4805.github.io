@@ -144,6 +144,75 @@
     .education-page h1 {
         font-size: 2rem;
     }
+    
+    .education-section h2 {
+        font-size: 1.4rem;
+    }
+    
+    .education-item h3 {
+        font-size: 1.1rem;
+    }
+    
+    .skills-grid,
+    .frameworks-list {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    }
+}
+
+@media (max-width: 480px) {
+    .education-container {
+        width: 95%;
+        padding: 15px;
+        margin-top: 80px;
+    }
+
+    .education-page h1 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .education-section {
+        margin-bottom: 1.5rem;
+    }
+    
+    .education-section h2 {
+        font-size: 1.2rem;
+        padding-bottom: 0.3rem;
+        margin-bottom: 1rem;
+    }
+    
+    .education-item {
+        padding: 0.75rem;
+        border-left: 3px solid rgba(0, 0, 0, 0.3);
+    }
+    
+    .education-item h3 {
+        font-size: 1rem;
+    }
+    
+    .education-year {
+        font-size: 0.85rem;
+    }
+    
+    .education-item p {
+        font-size: 0.9rem;
+    }
+    
+    .skills-grid,
+    .frameworks-list {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+    
+    .skill-tag {
+        padding: 0.6rem 1rem;
+        font-size: 0.85rem;
+    }
+    
+    .framework-item {
+        padding: 0.75rem;
+        font-size: 0.85rem;
+    }
 }
 
 </style>
