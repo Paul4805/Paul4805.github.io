@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Education</title>
+
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+
+/* ===== PAGE BACKGROUND ===== */
+.education-page {
+    background: url('assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
+/* ===== MAIN GLASS CONTAINER ===== */
+.education-container {
+    margin-top: 120px;
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 40px;
+    border-radius: 20px;
+
+    /* Dark glass look instead of white haze */
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: none;
+    border: 1px solid rgba(255,255,255,0.35);
+
+    /* Clear glass aesthetic */
+    box-shadow: 0 8px 32px rgba(31,38,135,0.25);
+}
+
+.education-page h1 {
+    font-family: "Playfair Display", serif;
+    font-size: 3rem;
+    text-align: center;
+    color: black;
+    margin-bottom: 2rem;
+    font-weight: 700;
+}
+
+/* ===== SECTION ===== */
+.education-section {
+    margin-bottom: 2.5rem;
+}
+
+.education-section h2 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    color: black;
+    margin-bottom: 1rem;
+    font-weight: 700;
+}
+
+/* ===== EDUCATION ITEM ===== */
+.education-item {
+    margin-bottom: 1.5rem;
+    padding: 1rem 1.2rem;
+
+    /* Removed inner white haze causing boxes */
+    background: transparent;
+    border-left: 3px solid rgba(255,255,255,0.4);
+}
+
+.education-item h3 {
+    font-size: 1.3rem;
+    margin: 0 0 0.3rem 0;
+    color: black;
+}
+
+.education-year {
+    font-size: 0.95rem;
+    color: rgba(0,0,0,0.7);
+    font-style: italic;
+    margin-bottom: 0.5rem;
+}
+
+.education-item p {
+    font-size: 1rem;
+    color: rgba(0,0,0,0.85);
+    margin: 0;
+    line-height: 1.5;
+}
+
+/* ===== FRAMEWORKS GRID ===== */
+.frameworks-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.framework-item {
+    padding: 0.9rem;
+    border-radius: 10px;
+    text-align: center;
+    color: black;
+
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: 0.3s;
+}
+
+.framework-item:hover {
+    transform: translateY(-3px);
+    background: rgba(255,255,255,0.15);
+}
+
+/* ===== SKILLS ===== */
+.skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.skill-tag {
+    padding: 0.7rem 1rem;
+    border-radius: 25px;
+    text-align: center;
+    color: black;
+
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    transition: 0.3s;
+}
+
+.skill-tag:hover {
+    transform: translateY(-2px);
+    background: rgba(255,255,255,0.15);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 768px) {
+    .education-container {
+        width: 90%;
+        padding: 20px;
+    }
+
+    .education-page h1 {
+        font-size: 2rem;
+    }
+}
+
+</style>
+</head>
+
+<body class="education-page">
+
+<nav class="navbar">
+<a href="index.html">Home</a>
+<a href="projects.html">Projects</a>
+<a href="blogs/index.html">Blogs</a>
+</nav>
+
+<div class="education-container">
+
+<h1>Education</h1>
+
+<div class="education-section">
+<h2>Schooling</h2>
+<div class="education-item">
+<h3>Kendriya Vidyalaya - IIT Madras</h3>
+<p class="education-year">Graduation Year: 2023</p>
+</div>
+</div>
+
+<div class="education-section">
+<h2>Bachelor of Technology (BTech)</h2>
+<div class="education-item">
+<h3>Indian Institute of Science Education and Research (IISER) Bhopal</h3>
+<p class="education-year">Graduation Year: 2027</p>
+<p>Branch/Specialization: Data Science Engineering</p>
+</div>
+</div>
+
+<div class="education-section">
+<h2>Frameworks & Languages</h2>
+<div class="frameworks-list">
+<div class="framework-item">Python</div>
+<div class="framework-item">JavaScript</div>
+<div class="framework-item">TensorFlow</div>
+<div class="framework-item">PyTorch</div>
+<div class="framework-item">React</div>
+<div class="framework-item">Flask</div>
+<div class="framework-item">NumPy</div>
+<div class="framework-item">Pandas</div>
+<div class="framework-item">SQL</div>
+<div class="framework-item">HTML/CSS</div>
+</div>
+</div>
+
+<div class="education-section">
+<h2>Skills</h2>
+<div class="skills-grid">
+<div class="skill-tag">Linear Algebra</div>
+<div class="skill-tag">Probability</div>
+<div class="skill-tag">Calculus</div>
+<div class="skill-tag">Machine Learning</div>
+<div class="skill-tag">Data Analysis</div>
+<div class="skill-tag">Problem Solving</div>
+<div class="skill-tag">Team Work</div>
+<div class="skill-tag">Critical Thinking</div>
+</div>
+</div>
+
+</div>
+
+<script src="js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,228 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url('../assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    color: black;
+    overflow-x: hidden;
+    animation: fadeIn 1s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Navbar Styles */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    padding: 1rem 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.navbar a {
+    color: black;
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: #000;
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar a:hover::before {
+    width: 100%;
+}
+
+/* Hero Section */
+.hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.name {
+    font-family: "Nothing You Could Do", cursive;
+    font-size: 4rem;
+    margin: 0;
+    display: inline-block;
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid black;
+    animation: typewriter 3s steps(19, end) forwards, blink-caret 0.75s step-end infinite;
+}
+
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 22ch; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: black; }
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    opacity: 0;
+    animation: fadeInUp 2s ease-out 2s forwards;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes frostedFadeIn {
+    from {
+        background: rgba(255, 255, 255, 0);
+        border-color: rgba(255, 255, 255, 0);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0);
+    }
+    to {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .name {
+        font-size: 2.5rem;
+    }
+    .subtitle {
+        font-size: 1.2rem;
+    }
+    .navbar {
+        gap: 1rem;
+    }
+    .navbar a {
+        padding: 0.5rem;
+    }
+}
+
+.page-title {
+    font-family: "Nothing You Could Do", cursive;
+    text-align: center;
+    font-size: 3rem;
+    margin-top: 100px;
+    color: black;
+    margin-bottom: 2rem;
+}
+
+.blog-list{
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 25px;
+    padding-bottom: 50px;
+}
+
+.blog-card{
+    width: 60%;
+    padding: 30px;
+    text-decoration: none;
+    color: black;
+    transition: all 0.4s ease;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0);
+    border: 1px solid rgba(255, 255, 255, 0);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0);
+    font-family: "Playfair Display", serif;
+    animation: frostedFadeIn 1.5s ease-in-out forwards;
+}
+
+.blog-card h3 {
+    font-family: "Playfair Display", serif;
+    font-size: 1.8rem;
+    margin: 0 0 10px 0;
+    font-weight: 500;
+    color: black;
+}
+
+.blog-card p {
+    font-family: "Playfair Display", serif;
+    font-size: 1.1rem;
+    font-weight: 500;
+    margin: 0;
+    color: rgba(0, 0, 0, 0.9);
+}
+
+.blog-card:hover{
+    background: rgba(255, 255, 255, 0.25);
+    transform: translateY(-8px);
+    box-shadow: 0 15px 45px 0 rgba(31, 38, 135, 0.5);
+}
+
+.blog-container{
+    margin-top:120px;
+    width:70%;
+    margin-left:auto;
+    margin-right:auto;
+    line-height:1.7;
+    font-family: "Playfair Display", serif;
+    padding: 40px;
+    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+}
+
+.blog-container h1,
+.blog-container h2,
+.blog-container h3 {
+    font-family: "Playfair Display", serif;
+    font-weight: 700;
+}
+
+/* Blog Page Background */
+body.blog-page {
+    background: linear-gradient(135deg, #ffffff 0%, #5b7768 50%, #51655c 100%);
+    background-attachment: fixed;
+}
+
+.blog-date{
+    opacity:0.6;
+    font-size:14px;
+    font-family: "Playfair Display", serif;
+}
