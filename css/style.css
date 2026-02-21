@@ -445,8 +445,21 @@ body.blog-page {
 @media (max-width: 360px) {
     .name {
         /* Slightly larger on very small phones and faster animation so it completes visibly */
-        font-size: 1.15rem !important;
+        font-size: 1.8rem !important;
         max-width: 92vw !important;
         animation: typewriter 2.4s steps(20, end) forwards, blink-caret 0.75s step-end infinite !important;
     }
+}
+
+/* Homepage: prevent scrolling and ensure hero fills viewport */
+body.home-page {
+    overflow: hidden; /* disable page scroll on home */
+    height: 100vh;
+}
+
+body.home-page .hero {
+    min-height: 100vh; /* ensure hero covers full viewport */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
