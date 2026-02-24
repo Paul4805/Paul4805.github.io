@@ -48,6 +48,11 @@
 /* ==========================================================================
    2. Base & General Styles
    ========================================================================== */
+html {
+    background: url('../assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+}
+
 body {
     font-family: var(--font-main);
     margin: 0;
@@ -230,6 +235,11 @@ body.home-page .hero {
    6. Blog Section (Listings & Single Posts)
    ========================================================================== */
 body.blog-page { 
+    background: linear-gradient(135deg, #ffffff 0%, #5b7768 50%, #51655c 100%); 
+    background-attachment: fixed; 
+}
+
+html.blog-page {
     background: linear-gradient(135deg, #ffffff 0%, #5b7768 50%, #51655c 100%); 
     background-attachment: fixed; 
 }
