@@ -1,410 +1,399 @@
 import os
 from pathlib import Path
-from docx import Document
-from bs4 import BeautifulSoup
 from datetime import datetime
+from xml.etree import ElementTree as ET
+from xml.dom import minidom
 
-def get_user_mode():
-    """Ask user whether to create new blog or update existing"""
-    print("\nSelect mode:")
-    print("1. Create new blog HTML file")
-    print("2. Update existing blog HTML file")
-    
-    while True:
-        choice = input("\nEnter choice (1 or 2): ").strip()
-        if choice in ['1', '2']:
-            return choice
-        print("Invalid choice. Please enter 1 or 2.")
+# Try to import docx library for Word document support
+try:
+    from docx import Document
+    DOCX_AVAILABLE = True
+except ImportError:
+    DOCX_AVAILABLE = False
 
-def get_user_input():
-    """Get Word document and HTML file names from user"""
-    while True:
-        word_doc = input("Enter the Word document name (e.g., blog.docx): ").strip()
-        if os.path.exists(word_doc):
-            break
-        print(f"Error: File '{word_doc}' not found. Please try again.")
-    
-    while True:
-        html_file = input("Enter the blog HTML file name (e.g., blogs/blog1.html): ").strip()
-        if os.path.exists(html_file):
-            break
-        print(f"Error: File '{html_file}' not found. Please try again.")
-    
-    return word_doc, html_file
-
-def get_new_blog_input():
-    """Get Word document and output path for new blog"""
-    while True:
-        word_doc = input("Enter the Word document name (e.g., blog.docx): ").strip()
-        if os.path.exists(word_doc):
-            break
-        print(f"Error: File '{word_doc}' not found. Please try again.")
-    
-    while True:
-        html_file = input("Enter the output HTML file path (e.g., blogs/blog2.html): ").strip()
-        
-        # Create directory if it doesn't exist
-        directory = os.path.dirname(html_file)
-        if directory and not os.path.exists(directory):
-            try:
-                os.makedirs(directory, exist_ok=True)
-            except Exception as e:
-                print(f"Error creating directory: {e}")
-                continue
-        
-        # Check if file already exists
-        if os.path.exists(html_file):
-            overwrite = input(f"File '{html_file}' already exists. Overwrite? (y/n): ").strip().lower()
-            if overwrite == 'y':
-                break
-        else:
-            break
-    
-    return word_doc, html_file
-
-def extract_content_from_docx(word_doc):
-    """Extract content from Word document, skipping the first line (used as title)"""
-    doc = Document(word_doc)
-    content = []
-    is_first_line = True
-    
-    for para in doc.paragraphs:
-        text = para.text.strip()
-        if text:
-            # Skip the first non-empty line as it will be used as the title
-            if is_first_line:
-                is_first_line = False
-                continue
-            
-            # Determine if it's a heading based on style
-            style = para.style.name
-            if 'Heading' in style:
-                level = int(style.split()[-1]) if style[-1].isdigit() else 1
-                content.append({
-                    'type': 'heading',
-                    'level': level,
-                    'text': text
-                })
-            else:
-                # Check if the entire paragraph is bold
-                is_bold = all(run.bold for run in para.runs if run.text.strip())
-                
-                if is_bold and len(para.runs) > 0:
-                    # Treat bold lines as subheadings (h3)
-                    content.append({
-                        'type': 'heading',
-                        'level': 3,
-                        'text': text
-                    })
-                else:
-                    content.append({
-                        'type': 'paragraph',
-                        'text': text
-                    })
-    
-    return content
-
-def get_blog_title_from_docx(word_doc):
-    """Get the first line of the document as blog title"""
-    doc = Document(word_doc)
-    
-    for para in doc.paragraphs:
-        text = para.text.strip()
-        if text:
-            return text
-    
-    return "Untitled Blog"
-
-def get_blog_description_from_docx(word_doc):
-    """Get the first paragraph (second non-empty line) as blog description"""
-    doc = Document(word_doc)
-    
-    lines_found = 0
-    for para in doc.paragraphs:
-        text = para.text.strip()
-        if text:
-            lines_found += 1
-            if lines_found == 2:
-                # Return first 150 characters as description
-                return (text[:150] + "...") if len(text) > 150 else text
-    
-    return "Click to read more..."
-
-def update_blogs_index(html_file, blog_title, blog_description):
-    """Update the blogs/index.html to add the new blog to the list"""
-    
-    blogs_index = "blogs/index.html"
-    
-    if not os.path.exists(blogs_index):
-        print(f"Warning: {blogs_index} not found. Skipping index update.")
-        return False
-    
-    try:
-        with open(blogs_index, 'r', encoding='utf-8') as f:
-            soup = BeautifulSoup(f.read(), 'html.parser')
-        
-        # Find the blog-list div
-        blog_list = soup.find('div', class_='blog-list')
-        
-        if not blog_list:
-            print("Error: Could not find 'blog-list' div in blogs/index.html")
-            return False
-        
-        # Create the relative path for the link (remove 'blogs/' prefix if present)
-        link_path = html_file.replace('blogs/', '')
-        
-        # Create new blog card HTML
-        new_card = f"""<a href="{link_path}" class="blog-card">
-        <h3>{blog_title}</h3>
-        <p>{blog_description}</p>
-    </a>"""
-        
-        # Parse the new card
-        new_soup = BeautifulSoup(new_card, 'html.parser')
-        new_element = new_soup.find('a', class_='blog-card')
-        
-        # Append to blog-list
-        blog_list.append(new_element)
-        
-        # Write back to file
-        with open(blogs_index, 'w', encoding='utf-8') as f:
-            f.write(str(soup.prettify()))
-        
-        return True
-    
-    except Exception as e:
-        print(f"Error updating blogs index: {e}")
-        return False
-
-def update_blog_in_index(html_file, new_title):
-    """Update an existing blog card in the blogs/index.html"""
-    
-    blogs_index = "blogs/index.html"
-    
-    if not os.path.exists(blogs_index):
-        print(f"Warning: {blogs_index} not found. Skipping index update.")
-        return False
-    
-    try:
-        with open(blogs_index, 'r', encoding='utf-8') as f:
-            soup = BeautifulSoup(f.read(), 'html.parser')
-        
-        # Create the relative path for the link (remove 'blogs/' prefix if present)
-        link_path = html_file.replace('blogs/', '')
-        
-        # Find all blog cards
-        blog_cards = soup.find_all('a', class_='blog-card')
-        
-        # Find the card that links to this blog
-        for card in blog_cards:
-            href = card.get('href', '')
-            if href.endswith(link_path) or href == link_path:
-                # Update the h3 title
-                title_tag = card.find('h3')
-                if title_tag:
-                    title_tag.string = new_title
-                    
-                    # Write back to file
-                    with open(blogs_index, 'w', encoding='utf-8') as f:
-                        f.write(str(soup.prettify()))
-                    return True
-        
-        print(f"Warning: Could not find blog card for {link_path} in index.")
-        return False
-    
-    except Exception as e:
-        print(f"Error updating blog in index: {e}")
-        return False
-
-def generate_html_content(content):
-    """Generate HTML content from extracted data"""
-    html_content = ""
-    
-    for item in content:
-        if item['type'] == 'heading':
-            level = item['level']
-            html_content += f"    <h{level}>{item['text']}</h{level}>\n"
-        elif item['type'] == 'paragraph':
-            html_content += f"    <p>{item['text']}</p>\n"
-    
-    return html_content
-
-def create_new_blog_html(html_file, content_html, blog_title):
-    """Create a new blog HTML file from scratch"""
-    
-    # Create the HTML structure
-    html_template = f"""<!DOCTYPE html>
+# Configuration
+BLOGS_DIR = Path(__file__).parent / "blogs"
+BLOG_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>{blog_title}</title>
-<link rel="stylesheet" href="../css/style.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>{title} | J Paul Masillamani</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="../css/blog_post_style.css" rel="stylesheet"/>
 </head>
-<body class="blog-page">
+<body class="blog-post-page">
 
-<nav class="navbar">
-<a href="../index.html">Home</a>
-<a href="index.html">Back to Blogs</a>
-</nav>
+    <nav class="navbar">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Back to Blogs</a>
+    </nav>
 
-<div class="blog-container">
-    <h1>{blog_title}</h1>
-    <p class="blog-date">{datetime.now().strftime("%B %Y")}</p>
+    <main class="blog-container">
+        <article class="glass-card">
+            <header class="post-header">
+                <h1 class="post-title">{title}</h1>
+                <p class="blog-date">{date}</p>
+            </header>
 
-{content_html}
-</div>
+            <div class="blog-content">
+{content}
+            </div>
+            
+            <footer class="post-footer">
+                <a href="index.html" class="back-link">← Back to all stories</a>
+            </footer>
+        </article>
+    </main>
 
-<script src="../js/main.js"></script>
 </body>
-</html>
-"""
+</html>"""
+
+def read_markdown_file(file_path):
+    """Read markdown/text/docx file and convert to HTML paragraphs.
+    Lines/paragraphs with ALL BOLD characters are treated as subtopics (h3 headings).
+    """
+    file_path = Path(file_path)
+    file_ext = file_path.suffix.lower()
+    
+    # Handle Word documents (.docx)
+    if file_ext == '.docx':
+        if not DOCX_AVAILABLE:
+            print("Error: To read .docx files, install python-docx:")
+            print("  pip install python-docx")
+            return None
+        
+        try:
+            doc = Document(file_path)
+            html_content = []
+            first_para = True
+            
+            for para in doc.paragraphs:
+                text = para.text.strip()
+                if not text:
+                    continue
+                
+                # Check if all runs in this paragraph are bold
+                is_all_bold = all(run.bold for run in para.runs if run.text.strip())
+                
+                if is_all_bold and any(run.text.strip() for run in para.runs):
+                    # Treat as subtopic heading
+                    html_content.append(f'                <h3 class="blog-subtitle">{text}</h3>')
+                elif first_para:
+                    # First paragraph is lead
+                    html_content.append(f'                <p class="lead">\n                    {text}\n                </p>')
+                    first_para = False
+                else:
+                    # Regular paragraph
+                    html_content.append(f'                <p>\n                    {text}\n                </p>')
+            
+            return '\n                \n'.join(html_content)
+        except Exception as e:
+            print(f"Error reading Word document: {e}")
+            return None
+    
+    # Handle plain text and markdown files
+    elif file_ext in ['.txt', '.md', '.markdown']:
+        encodings = ['utf-8', 'latin-1', 'cp1252', 'iso-8859-1', 'utf-16']
+        content = None
+        
+        for encoding in encodings:
+            try:
+                with open(file_path, 'r', encoding=encoding) as f:
+                    content = f.read().strip()
+                break
+            except (UnicodeDecodeError, LookupError):
+                continue
+        
+        if content is None:
+            print(f"Error: Could not read file '{file_path}' with any supported encoding.")
+            return None
+        
+        try:
+            # Split by double newlines to identify paragraphs
+            paragraphs = content.split('\n\n')
+            html_content = []
+            first_para = True
+            
+            for para in paragraphs:
+                para = para.strip()
+                if not para:
+                    continue
+                
+                # Check if line is all bold (markdown syntax: **text** or __text__)
+                # Remove markdown bold markers and check if that's all there is
+                clean_para = para.replace('**', '').replace('__', '')
+                is_bold_line = (
+                    para.startswith('**') and para.endswith('**') and len(para) > 4 and
+                    '**' not in clean_para
+                ) or (
+                    para.startswith('__') and para.endswith('__') and len(para) > 4 and
+                    '__' not in clean_para
+                )
+                
+                if is_bold_line:
+                    # Remove markdown bold markers and create heading
+                    heading_text = para.replace('**', '').replace('__', '')
+                    html_content.append(f'                <h3 class="blog-subtitle">{heading_text}</h3>')
+                elif first_para:
+                    # First paragraph is lead
+                    html_content.append(f'                <p class="lead">\n                    {para}\n                </p>')
+                    first_para = False
+                else:
+                    # Regular paragraph
+                    html_content.append(f'                <p>\n                    {para}\n                </p>')
+            
+            return '\n                \n'.join(html_content)
+        except Exception as e:
+            print(f"Error processing file: {e}")
+            return None
+    
+    else:
+        print(f"Error: Unsupported file type '{file_ext}'")
+        print("Supported file types: .txt, .md, .markdown, .docx")
+        return None
+
+def create_blog_html(filename, title, content_html, date=None):
+    """Create a new blog HTML file."""
+    if date is None:
+        date = datetime.now().strftime("%B %Y")
+    
+    html_content = BLOG_TEMPLATE.format(
+        title=title,
+        date=date,
+        content=content_html
+    )
+    
+    file_path = BLOGS_DIR / filename
     
     try:
-        with open(html_file, 'w', encoding='utf-8') as f:
-            f.write(html_template)
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"✓ Blog created: {file_path}")
         return True
     except Exception as e:
-        print(f"Error creating file: {e}")
+        print(f"Error creating blog file: {e}")
         return False
 
-def update_html_file(html_file, content_html, blog_title):
-    """Update the blog HTML file with new content and title"""
-    with open(html_file, 'r', encoding='utf-8') as f:
-        soup = BeautifulSoup(f.read(), 'html.parser')
+def update_blog_html(file_path, title, content_html, date=None):
+    """Update an existing blog HTML file."""
+    if date is None:
+        date = datetime.now().strftime("%B %Y")
     
-    # Find the blog-container div
-    blog_container = soup.find('div', class_='blog-container')
-    
-    if not blog_container:
-        print("Error: Could not find 'blog-container' div in HTML file.")
-        return False
-    
-    # Find and update the title (h1)
-    title = blog_container.find('h1')
-    if title:
-        title.string = blog_title
-    else:
-        # Create a new h1 if it doesn't exist
-        new_title = soup.new_tag('h1')
-        new_title.string = blog_title
-        blog_container.insert(0, new_title)
-    
-    # Find the date
-    date = blog_container.find('p', class_='blog-date')
-    
-    # Clear the container
-    blog_container.clear()
-    
-    # Add back title
-    title = blog_container.find('h1')
-    if not title:
-        new_title = soup.new_tag('h1')
-        new_title.string = blog_title
-        blog_container.append(new_title)
-    else:
-        blog_container.append(title)
-    
-    # Add back date if it existed
-    if date:
-        blog_container.append(date)
-    
-    # Parse and add the new content
-    new_soup = BeautifulSoup(content_html, 'html.parser')
-    for element in new_soup.children:
-        if element.name:  # Skip text nodes
-            blog_container.append(element)
-    
-    # Write back to file
-    with open(html_file, 'w', encoding='utf-8') as f:
-        f.write(str(soup.prettify()))
-    
-    return True
-
-def main():
-    """Main function"""
-    print("=" * 50)
-    print("Blog HTML Generator from Word Document")
-    print("=" * 50)
+    html_content = BLOG_TEMPLATE.format(
+        title=title,
+        date=date,
+        content=content_html
+    )
     
     try:
-        mode = get_user_mode()
-        
-        if mode == '1':
-            # Create new blog
-            print("\n--- Create New Blog ---")
-            word_doc, html_file = get_new_blog_input()
-            
-            print(f"\nReading Word document: {word_doc}")
-            
-            # Get the blog title from the first line
-            blog_title = get_blog_title_from_docx(word_doc)
-            print(f"Blog title: '{blog_title}'")
-            
-            # Get the blog description from the second line
-            blog_description = get_blog_description_from_docx(word_doc)
-            print(f"Blog description: '{blog_description}'")
-            
-            # Extract content (skipping the first line which is the title)
-            content = extract_content_from_docx(word_doc)
-            
-            print(f"Generating HTML content...")
-            content_html = generate_html_content(content)
-            
-            print(f"Creating new blog file: {html_file}")
-            if create_new_blog_html(html_file, content_html, blog_title):
-                print("✓ New blog created successfully!")
-                print(f"Created file: {html_file}")
-                print(f"Blog title: '{blog_title}'")
-                
-                # Update blogs index
-                print(f"Updating blogs index...")
-                if update_blogs_index(html_file, blog_title, blog_description):
-                    print("✓ Blogs index updated!")
-                else:
-                    print("✗ Failed to update blogs index. You may need to add it manually.")
-            else:
-                print("\n✗ Failed to create blog file.")
-        
-        else:
-            # Update existing blog
-            print("\n--- Update Existing Blog ---")
-            word_doc, html_file = get_user_input()
-            
-            print(f"\nReading Word document: {word_doc}")
-            
-            # Get the blog title from the first line
-            blog_title = get_blog_title_from_docx(word_doc)
-            print(f"Blog title: '{blog_title}'")
-            
-            # Extract content (skipping the first line which is the title)
-            content = extract_content_from_docx(word_doc)
-            
-            print(f"Generating HTML content...")
-            content_html = generate_html_content(content)
-            
-            print(f"Updating blog file: {html_file}")
-            if update_html_file(html_file, content_html, blog_title):
-                print("✓ Blog updated successfully!")
-                print(f"Updated file: {html_file}")
-                print(f"Blog title: '{blog_title}'")
-                
-                # Update the blog title in index
-                print(f"Updating blogs index...")
-                if update_blog_in_index(html_file, blog_title):
-                    print("✓ Blog title updated in index!")
-                else:
-                    print("✗ Could not update blog title in index.")
-            else:
-                print("\n✗ Failed to update blog file.")
-    
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"✓ Blog updated: {file_path}")
+        return True
     except Exception as e:
-        print(f"\nError: {str(e)}")
-        print("Make sure you have python-docx and beautifulsoup4 installed:")
-        print("pip install python-docx beautifulsoup4")
+        print(f"Error updating blog file: {e}")
+        return False
+
+def add_to_blog_index(filename, title, description):
+    """Add a blog entry to the blogs/index.html file."""
+    index_path = BLOGS_DIR / "index.html"
+    
+    if not index_path.exists():
+        print(f"Error: {index_path} not found.")
+        return False
+    
+    # Read the current index file
+    try:
+        with open(index_path, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except Exception as e:
+        print(f"Error reading index file: {e}")
+        return False
+    
+    # Create the blog card HTML
+    blog_card = f"""     <a class="blog-card" href="{filename}">
+      <h3>
+       {title}
+      </h3>
+      <p>
+       {description}
+      </p>
+      <span class="read-more">
+       Read Entry →
+      </span>
+     </a>
+"""
+    
+    # Find the blog-list div and insert the new card
+    blog_list_end = content.find('    </div>\n   </div>')
+    
+    if blog_list_end == -1:
+        print("Error: Could not find blog-list div in index.html")
+        return False
+    
+    # Check if blog already exists in index
+    if f'href="{filename}"' in content:
+        # Update existing entry
+        import re
+        pattern = rf'<a class="blog-card" href="{re.escape(filename)}">\s*<h3>\s*[^<]+\s*</h3>\s*<p>\s*[^<]+\s*</p>\s*<span class="read-more">\s*Read Entry →\s*</span>\s*</a>'
+        if re.search(pattern, content):
+            content = re.sub(pattern, blog_card.rstrip(), content)
+            print(f"✓ Index updated: {filename}")
+        else:
+            print("Warning: Could not find existing entry for update.")
+            return False
+    else:
+        # Insert new entry
+        closing_divs = '    </div>\n   </div>'
+        new_content = content[:blog_list_end] + '\n' + blog_card + closing_divs + content[blog_list_end + len(closing_divs):]
+        content = new_content
+        print(f"✓ Index updated: Added {filename}")
+    
+    # Write back to index file
+    try:
+        with open(index_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        return True
+    except Exception as e:
+        print(f"Error writing to index file: {e}")
+        return False
+
+def main():
+    """Main function to handle user interaction."""
+    print("\n" + "="*60)
+    print("      BLOG UPDATER - Manage Your Blog Posts")
+    print("="*60 + "\n")
+    
+    # Step 1: Ask user if they want to update or create
+    while True:
+        print("What would you like to do?")
+        print("1. Update existing blog")
+        print("2. Create new blog from scratch")
+        choice = input("\nEnter your choice (1 or 2): ").strip()
+        
+        if choice in ['1', '2']:
+            break
+        print("Invalid choice. Please enter 1 or 2.\n")
+    
+    if choice == '1':
+        update_blog()
+    else:
+        create_new_blog()
+
+def update_blog():
+    """Handle updating an existing blog."""
+    print("\n" + "-"*60)
+    print("UPDATE EXISTING BLOG")
+    print("-"*60 + "\n")
+    
+    # Get HTML file path
+    while True:
+        html_file = input("Enter the path to the HTML file to update (e.g., blogs/blog1.html): ").strip()
+        html_path = Path(html_file)
+        
+        if not html_path.exists():
+            print(f"Error: File '{html_file}' not found. Try again.\n")
+            continue
+        break
+    
+    # Get doc file path
+    while True:
+        doc_file = input("Enter the path to the document file (e.g., docs/blog1.md or docs/blog1.txt): ").strip()
+        doc_path = Path(doc_file)
+        
+        if not doc_path.exists():
+            print(f"Error: File '{doc_file}' not found. Try again.\n")
+            continue
+        break
+    
+    # Get blog title
+    title = input("Enter the blog title: ").strip()
+    if not title:
+        print("Error: Title cannot be empty.")
+        return
+    
+    # Ask for date (optional)
+    date_input = input("Enter the date (optional, format: Month Year, e.g., 'February 2026'): ").strip()
+    date = date_input if date_input else datetime.now().strftime("%B %Y")
+    
+    # Read and convert content
+    content_html = read_markdown_file(doc_path)
+    if content_html is None:
+        return
+    
+    # Update the blog HTML file
+    if update_blog_html(html_path, title, content_html, date):
+        print("\n✓ Blog updated successfully!")
+    else:
+        print("\n✗ Failed to update blog.")
+
+def create_new_blog():
+    """Handle creating a new blog from scratch."""
+    print("\n" + "-"*60)
+    print("CREATE NEW BLOG")
+    print("-"*60 + "\n")
+    
+    # Get new filename
+    while True:
+        filename = input("Enter the new HTML filename (e.g., blog2.html): ").strip()
+        
+        if not filename.endswith('.html'):
+            filename += '.html'
+        
+        file_path = BLOGS_DIR / filename
+        
+        if file_path.exists():
+            overwrite = input(f"File '{filename}' already exists. Overwrite? (y/n): ").strip().lower()
+            if overwrite == 'y':
+                break
+            else:
+                continue
+        else:
+            break
+    
+    # Get doc file path
+    while True:
+        doc_file = input("Enter the path to the document file (e.g., docs/blog2.md or docs/blog2.txt): ").strip()
+        doc_path = Path(doc_file)
+        
+        if not doc_path.exists():
+            print(f"Error: File '{doc_file}' not found. Try again.\n")
+            continue
+        break
+    
+    # Get blog title
+    title = input("Enter the blog title: ").strip()
+    if not title:
+        print("Error: Title cannot be empty.")
+        return
+    
+    # Ask for date (optional)
+    date_input = input("Enter the date (optional, format: Month Year, e.g., 'February 2026'): ").strip()
+    date = date_input if date_input else datetime.now().strftime("%B %Y")
+    
+    # Get blog description for index
+    description = input("Enter a brief description for the blog listing (1-2 sentences): ").strip()
+    if not description:
+        print("Error: Description cannot be empty.")
+        return
+    
+    # Read and convert content
+    content_html = read_markdown_file(doc_path)
+    if content_html is None:
+        return
+    
+    # Create the blog HTML file
+    if create_blog_html(filename, title, content_html, date):
+        # Add to index.html
+        if add_to_blog_index(filename, title, description):
+            print("\n✓ Blog created and added to index successfully!")
+        else:
+            print("\n⚠ Blog created but failed to add to index.")
+    else:
+        print("\n✗ Failed to create blog.")
 
 if __name__ == "__main__":
     main()

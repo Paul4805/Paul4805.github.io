@@ -1,0 +1,178 @@
+/* ==========================================================================
+   1. Global Setup (Consistency Layer)
+   ========================================================================== */
+:root {
+    --font-main: 'Inter', sans-serif;
+    --font-accent: "Nothing You Could Do", cursive;
+    --font-heading: 'Playfair Display', serif;
+    --text-dark: #0b0b0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.blog-page {
+    font-family: var(--font-main);
+    color: var(--text-dark);
+    background: url('../assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. Navbar (Transparent Style)
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    padding: 1.5rem 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.navbar a {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--text-dark);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar a:hover::before { width: 70%; }
+
+/* ==========================================================================
+   3. Wide Blog Container & Glass Card
+   ========================================================================== */
+.blog-container {
+    /* Significantly wider horizontal limit */
+    max-width: 1200px; 
+    margin: 110px auto 50px;
+    padding: 0 2rem;
+    width: 100%;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    /* Wide internal framing */
+    padding: 3.5rem 5rem; 
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.page-title {
+    font-family: var(--font-accent);
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 3.5rem;
+}
+
+/* ==========================================================================
+   4. Individual Blog Entries (Wider Layout)
+   ========================================================================== */
+.blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.8rem;
+}
+
+.blog-card {
+    text-decoration: none;
+    color: inherit;
+    /* Keeps text standard size, but stretches the container */
+    padding: 2.5rem 4rem; 
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    display: block;
+}
+
+.blog-card h3 {
+    font-family: var(--font-heading);
+    /* Original font sizes preserved */
+    font-size: 1.45rem; 
+    margin-bottom: 0.6rem;
+    color: var(--text-dark);
+}
+
+.blog-card p {
+    font-size: 1.05rem;
+    line-height: 1.6;
+    color: #222;
+    margin-bottom: 1.5rem;
+    /* Prevents the text from stretching across the entire 1200px 
+       which makes it much easier to read. */
+    max-width: 750px; 
+}
+
+.read-more {
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.6;
+    transition: all 0.3s;
+}
+
+/* Hover States */
+.blog-card:hover {
+    background: rgba(255, 255, 255, 0.4);
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+}
+
+.blog-card:hover .read-more {
+    opacity: 1;
+}
+
+/* ==========================================================================
+   5. Animations & Responsiveness
+   ========================================================================== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 1024px) {
+    .glass-card { padding: 3rem; }
+}
+
+@media (max-width: 768px) {
+    .navbar { gap: 0.5rem; padding: 1rem 0; }
+    .navbar a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    
+    .glass-card { padding: 2rem 1.5rem; border-radius: 20px; }
+    .page-title { font-size: 2.8rem; }
+    .blog-card { padding: 1.5rem; }
+    .blog-container { margin-top: 90px; }
+}

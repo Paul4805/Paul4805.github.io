@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
  <head>
-  <!-- Blogs listing page -->
   <meta charset="utf-8"/>
   <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-  <title>Blogs</title>
-  <!-- Load fonts first so headings/descriptions render with correct fonts immediately -->
+  <title>
+   Blogs | J Paul Masillamani
+  </title>
   <link href="https://fonts.googleapis.com" rel="preconnect"/>
   <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
-  <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&amp;display=swap" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&amp;display=swap" rel="stylesheet"/>
-  <link href="../css/style.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&amp;family=Inter:wght@300;400;600&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet"/>
+  <link href="../css/listing_style.css" rel="stylesheet"/>
  </head>
- <body>
+ <body class="blog-page">
   <nav class="navbar">
    <a href="../index.html">
     Home
@@ -23,21 +22,29 @@
    <a href="../projects.html">
     Projects
    </a>
-  </nav>
-  <h2 class="page-title">
-   Blogs
-  </h2>
-  <div class="blog-list">
-   <a class="blog-card" href="blog1.html">
-    <h3>
-     The Love-Relationship(Part 1)
-    </h3>
-    <p>
-     A profound exploration of love as a transition from fleeting emotion to sacrificial responsibility.
-    </p>
+   <a href="index.html">
+    Blogs
    </a>
-  </div>
-  <script src="../js/main.js">
-  </script>
+  </nav>
+  <main class="blog-container">
+   <h1 class="page-title">
+    Blogs
+   </h1>
+   <div class="glass-card">
+    <div class="blog-list">
+     <a class="blog-card" href="blog1.html">
+      <h3>
+       The Love-Relationship(Part 1)
+      </h3>
+      <p>
+       A profound exploration of love as a transition from fleeting emotion to sacrificial responsibility.
+      </p>
+      <span class="read-more">
+       Read Entry →
+      </span>
+     </a>
+    </div>
+   </div>
+  </main>
  </body>
 </html>

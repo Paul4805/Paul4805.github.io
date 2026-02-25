@@ -1,0 +1,145 @@
+
+/* ==========================================================================
+   1. Setup & Background
+   ========================================================================== */
+:root {
+    --font-main: 'Inter', sans-serif;
+    --font-accent: "Nothing You Could Do", cursive;
+    --font-heading: 'Playfair Display', serif;
+    --text-dark: #0b0b0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.home-page {
+    font-family: var(--font-main);
+    color: var(--text-dark);
+    background: url('../assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   2. Transparent Navbar
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent; /* Removed blur and bg color */
+    padding: 1.5rem 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.navbar a {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--text-dark);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar a:hover::before { 
+    width: 70%; 
+}
+
+/* ==========================================================================
+   3. Hero & Typewriter
+   ========================================================================== */
+.hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0 1rem;
+}
+
+.name {
+    font-family: var(--font-accent);
+    font-size: 4rem;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 25ch; 
+    border-right: 3px solid var(--text-dark);
+    animation: 
+        typewriter 2.5s steps(25, end) forwards,
+        blink-caret 0.75s step-end infinite;
+}
+
+.subtitle {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    opacity: 0;
+    letter-spacing: 1px;
+    animation: fadeInUp 1s ease-out 2.8s forwards;
+}
+
+/* ==========================================================================
+   4. Animations
+   ========================================================================== */
+@keyframes typewriter {
+    from { width: 0; }
+    to { width: 23ch; }
+}
+
+@keyframes blink-caret {
+    from, to { border-color: transparent; }
+    50% { border-color: var(--text-dark); }
+}
+
+@keyframes fadeInUp {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+/* ==========================================================================
+   5. Responsiveness
+   ========================================================================== */
+@media (max-width: 768px) {
+    .navbar { gap: 0.5rem; padding: 1rem 0; }
+    .navbar a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    
+    .name { font-size: 2.2rem; border-right-width: 2px; }
+    .subtitle { font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+    .name { font-size: 1.6rem; }
+}

@@ -1,0 +1,165 @@
+/* ==========================================================================
+   1. Setup & Background
+   ========================================================================== */
+:root {
+    --font-main: 'Inter', sans-serif;
+    --font-accent: "Nothing You Could Do", cursive;
+    --font-heading: 'Playfair Display', serif;
+    --text-dark: #0b0b0b;
+}
+
+body.education-page {
+    font-family: var(--font-main);
+    color: var(--text-dark);
+    background: url('../assets/images/bg.jpg') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* ==========================================================================
+   2. Transparent Navbar
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent; /* Removed blur and bg color */
+    padding: 1.5rem 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.navbar a {
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--text-dark);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar a:hover::before { width: 70%; }
+
+/* ==========================================================================
+   3. Glass Card Content
+   ========================================================================== */
+.education-container {
+    max-width: 900px;
+    margin: 100px auto 40px; 
+    padding: 1.5rem;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent white */
+    backdrop-filter: blur(15px); /* Strong glass blur */
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+    padding: 3rem;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+.page-title {
+    font-family: var(--font-accent);
+    font-size: 3.5rem;
+    text-align: center;
+    margin-bottom: 2.5rem;
+}
+
+.section-label {
+    font-family: var(--font-heading);
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.education-section {
+    margin-bottom: 3.5rem;
+}
+
+/* Education Items */
+.education-item {
+    margin-bottom: 2rem;
+    padding-left: 1.5rem;
+    border-left: 2px solid var(--text-dark);
+}
+
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.education-item h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Skills/Frameworks Grid */
+.frameworks-list, .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+}
+
+.framework-item, .skill-tag {
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 12px;
+    text-align: center;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.framework-item:hover, .skill-tag:hover {
+    background: rgba(255, 255, 255, 0.5);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+}
+
+.skill-tag { border-radius: 50px; }
+
+/* ==========================================================================
+   4. Animations & Responsiveness
+   ========================================================================== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .navbar { gap: 0.5rem; padding: 1rem 0; }
+    .navbar a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    
+    .glass-card { padding: 1.5rem; border-radius: 20px; }
+    .page-title { font-size: 2.5rem; }
+    .item-header { flex-direction: column; }
+    .education-container { margin-top: 80px; }
+}

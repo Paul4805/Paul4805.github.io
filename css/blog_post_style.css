@@ -1,0 +1,164 @@
+/* ==========================================================================
+   1. Setup & Requested Gradient Background
+   ========================================================================== */
+:root {
+    --font-main: 'Inter', sans-serif;
+    --font-accent: 'Playfair Display', serif;
+    --font-heading: 'Playfair Display', serif;
+    --text-dark: #0b0b0b;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.blog-post-page {
+    font-family: 'Playfair Display', serif;
+    color: var(--text-dark);
+    /* Your consistent linear gradient */
+    background: linear-gradient(135deg, #ffffff 0%, #5b7768 50%, #51655c 100%);
+    background-attachment: fixed;
+    min-height: 100vh;
+    line-height: 1.8;
+}
+
+/* ==========================================================================
+   2. Navbar (Consistent Logic)
+   ========================================================================== */
+.navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: transparent;
+    padding: 1.5rem 0;
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+}
+
+.navbar a {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-dark);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.navbar a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+.navbar a::before {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: var(--text-dark);
+    transition: all 0.3s ease;
+    transform: translateX(-50%);
+}
+
+.navbar a:hover::before { width: 70%; }
+
+/* ==========================================================================
+   3. Wide Glass Container
+   ========================================================================== */
+.blog-container {
+    max-width: 1200px; 
+    margin: 110px auto 60px;
+    padding: 0 2rem;
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.25); /* Slightly more opaque for gradient visibility */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 30px;
+    padding: 4rem 5rem;
+    box-shadow: 0 20px 45px rgba(0, 0, 0, 0.1);
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* ==========================================================================
+   4. Blog Content Logic
+   ========================================================================== */
+.post-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.post-title {
+    font-family: var(--font-heading);
+    font-size: 3rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.blog-date {
+    font-family: var(--font-accent);
+    font-size: 1.5rem;
+    color: #444;
+}
+
+.blog-content {
+    max-width: 800px; /* Essential for comfortable reading width */
+    margin: 0 auto;
+}
+
+.blog-content .lead {
+    font-style: italic;
+    margin-bottom: 2.5rem;
+    color: #000000;
+}
+
+.blog-content p {
+    font-size: 1.1rem;
+    margin-bottom: 1.8rem;
+    color: #1a1a1a;
+}
+
+.post-footer {
+    margin-top: 4rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.back-link {
+    text-decoration: none;
+    color: var(--text-dark);
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1.5px;
+    transition: opacity 0.3s;
+}
+
+.back-link:hover { opacity: 0.5; }
+
+/* ==========================================================================
+   5. Animations
+   ========================================================================== */
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .navbar { gap: 0.5rem; padding: 1rem 0; }
+    .navbar a { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    
+    .glass-card { padding: 2.5rem 1.5rem; border-radius: 20px; }
+    .post-title { font-size: 2.2rem; }
+    .blog-container { margin-top: 90px; }
+}
