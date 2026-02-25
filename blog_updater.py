@@ -172,6 +172,11 @@ def create_blog_html(filename, title, content_html, date=None):
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
         print(f"✓ Blog created: {file_path}")
+        # Ensure bg-fixed div is present
+        try:
+            insert_bg_fixed(file_path)
+        except Exception:
+            pass
         return True
     except Exception as e:
         print(f"Error creating blog file: {e}")
@@ -192,10 +197,51 @@ def update_blog_html(file_path, title, content_html, date=None):
         with open(file_path, 'w', encoding='utf-8') as f:
             f.write(html_content)
         print(f"✓ Blog updated: {file_path}")
+        # Ensure bg-fixed div is present
+        try:
+            insert_bg_fixed(file_path)
+        except Exception:
+            pass
         return True
     except Exception as e:
         print(f"Error updating blog file: {e}")
         return False
+
+
+def insert_bg_fixed(html_path):
+    """Insert <div class=\"bg-fixed\"></div> right after the opening <body> tag if missing."""
+    path = Path(html_path)
+    if not path.exists():
+        return
+
+    try:
+        with open(path, 'r', encoding='utf-8') as f:
+            content = f.read()
+    except Exception:
+        # try fallback encodings
+        with open(path, 'r', encoding='latin-1') as f:
+            content = f.read()
+
+    if 'class=\"bg-fixed\"' in content or "class='bg-fixed'" in content:
+        return
+
+    # Find the opening <body ...> tag
+    body_idx = content.find('<body')
+    if body_idx == -1:
+        return
+
+    # find the closing '>' of the opening body tag
+    close_idx = content.find('>', body_idx)
+    if close_idx == -1:
+        return
+
+    insert_at = close_idx + 1
+    snippet = '\n    <div class="bg-fixed"></div>\n'
+    new_content = content[:insert_at] + snippet + content[insert_at:]
+
+    # Write back
+    with open(path, 'w', encoding='utf-8') as f:
+        f.write(new_content)
 
 def add_to_blog_index(filename, title, description):
     """Add a blog entry to the blogs/index.html file."""
