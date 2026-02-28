@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>A Poem | J Paul Masillamani</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com"/>
+    <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+    <link href="https://fonts.googleapis.com/css2?family=Nothing+You+Could+Do&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet"/>
+    <link href="../css/blog_post_style.css" rel="stylesheet"/>
+</head>
+<body class="blog-post-page">
+    <div class="bg-fixed"></div>
+
+    <nav class="navbar">
+        <a href="../index.html">Home</a>
+        <a href="index.html">Back to Blogs</a>
+    </nav>
+
+    <main class="blog-container">
+        <article class="glass-card">
+            <header class="post-header">
+                <h1 class="post-title">I accede to it</h1>
+                <p class="blog-date">February 2026</p>
+            </header>
+
+            <div class="blog-content">
+                <p class="lead"><em>
+                    Every season passes, notions depart.<br>
+                    It is reality, the order of cruelty.<br>
+                    Maybe it was never meant to be; maybe it was just the heart chasing the wind.<br>
+                    Even nature sheds, cries, and mourns—who am I?<br>
+                    An outcast in a fleeting existence.<br>
+                    I accede to it.<br><br>
+
+                    Can I question? What should I question?<br>
+                    The delusion I lived in is more perpetual than the so-called eternal.<br>
+                    Is it foolishness or the inevitable that I chased you?<br>
+                    Would I change? Would my longings cease to exist?<br>
+                    My own soul cannot comprehend.<br>
+                    I accede to it.<br><br>
+
+                    Is it a sin if a trespasser longs for something not his own?<br>
+                    Getting stuck in a loop of illusion, a mirage in the desert of this heart.<br>
+                    An eternal illusion of the unattainable.<br>
+                    All the knowledge of this stranger is useless<br>
+                    Unless he's able to escape this wretched illusion.<br>
+                    I accede to it.<br><br>
+
+                    It was always you; everything was about you.<br>
+                    Now all I'm left with is a sparse reminiscence of you.<br>
+                    All I desire and hope for is quietness and tranquility.<br>
+                    All this cruelty and wretchedness has made me realize the true essence of life.<br>
+                    The greatest blessing a trespasser could hope for is stillness with his Maker.<br>
+                    I accede to him.
+                </em></p>
+            </div>
+
+            <footer class="post-footer">
+                <a href="index.html" class="back-link">← Back to all stories</a>
+            </footer>
+        </article>
+    </main>
+
+    <!-- smooth fade-in/out script -->
+    <script>
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+            var fadeTime = 800;
+            document.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    if (this.target === '_blank' || this.href.indexOf(location.origin) !== 0) return;
+                    e.preventDefault();
+                    var url = this.href;
+                    document.body.style.opacity = '0';
+                    setTimeout(function() { window.location = url; }, fadeTime);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -14,6 +14,12 @@
     box-sizing: border-box;
 }
 
+/* Page opacity transition for smooth loading */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
 body.blog-page {
     font-family: var(--font-main);
     color: var(--text-dark);

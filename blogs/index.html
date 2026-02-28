@@ -44,8 +44,43 @@
        Read Entry →
       </span>
      </a>
+     <a class="blog-card" href="poem1.html">
+      <h3>
+       I accede to it
+      </h3>
+      <p>
+       A reflection on acceptance and surrender in the face of life's complexities.
+      </p>
+      <span class="read-more">
+       Read Entry →
+      </span>
+     </a>
     </div>
    </div>
   </main>
+
+    <!-- smooth fade-in/out script -->
+    <script>
+        // reveal body when fully loaded
+        window.addEventListener('load', function() {
+            document.body.style.opacity = '1';
+        });
+
+        // fade-out before navigating links, longer to allow page load
+        document.addEventListener('DOMContentLoaded', function() {
+            var fadeTime = 800; // match CSS transition (ms)
+            document.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function(e) {
+                    if (this.target === '_blank' || this.href.indexOf(location.origin) !== 0) return;
+                    e.preventDefault();
+                    var url = this.href;
+                    document.body.style.opacity = '0';
+                    setTimeout(function() {
+                        window.location = url;
+                    }, fadeTime);
+                });
+            });
+        });
+    </script>
  </body>
 </html>

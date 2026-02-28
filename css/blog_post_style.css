@@ -14,6 +14,12 @@
     box-sizing: border-box;
 }
 
+/* opacity transition for smoother page loads */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
 body.blog-post-page {
     font-family: 'Playfair Display', serif;
     color: var(--text-dark);

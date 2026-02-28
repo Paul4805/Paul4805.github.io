@@ -8,6 +8,11 @@
     --text-dark: #0b0b0b;
 }
 
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
 body.education-page {
     font-family: var(--font-main);
     color: var(--text-dark);

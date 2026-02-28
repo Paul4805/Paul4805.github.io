@@ -15,6 +15,12 @@
     box-sizing: border-box;
 }
 
+/* page opacity transition for smooth navigation */
+body {
+    opacity: 0;
+    transition: opacity 0.8s ease;
+}
+
 body.home-page {
     font-family: var(--font-main);
     color: var(--text-dark);
